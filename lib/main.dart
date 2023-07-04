@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project_pomodoro/pages/pomodoro.dart';
 import 'package:project_pomodoro/store/counter_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
+import 'package:project_pomodoro/store/pomodoro_store.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +14,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        Provider<PomodoreStore>(create: (_) => PomodoreStore()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const Pomodoro(),
       ),
-      home: const Pomodoro(),
     );
   }
 }
@@ -41,10 +47,11 @@ class HomePage extends StatelessWidget {
               const Text(
                 'You have pushed the button this many times:',
               ),
-              Observer(builder: (_) =>               Text(
-                '${store.counter}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              )),
+              Observer(
+                  builder: (_) => Text(
+                        '${store.counter}',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      )),
             ],
           ),
         ),
